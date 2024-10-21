@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Provider } from "react-redux";
-import store from "./store/store";
+import store from "./app/store.js";
 
 import PuppyDetails from "./features/puppies/PuppyDetails";
 import PuppyList from "./features/puppies/PuppyList";
@@ -19,16 +19,18 @@ export default function App() {
   const [selectedPuppyId, setSelectedPuppyId] = useState();
 
   return (
-    <Provider store={store}>
-      <h1>Puppy Bowl</h1>
+    <>
+    <h1>Puppy Bowl</h1>
+      
       <PuppyForm />
-      <main>
+      
         <PuppyList setSelectedPuppyId={setSelectedPuppyId} />
         <PuppyDetails
           selectedPuppyId={selectedPuppyId}
           setSelectedPuppyId={setSelectedPuppyId}
-        />
-      </main>
-    </Provider>
+          />
+    </>
+      
+    
   );
 }
