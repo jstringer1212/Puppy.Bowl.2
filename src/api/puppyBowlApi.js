@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const COHORT_CODE = "2407-FTB-ET-WEB-PT";
-const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/${COHORT_CODE}/`;
+const API_URL = `https://fsa-puppy-bowl.herokuapp.com/api/2407-FTB-ET-WEB-PT/`;
 
 // Configure createApi to use API_URL as the base URL
 // Add "Puppy" as a tag type
@@ -12,14 +12,20 @@ const api = createApi({
   endpoints: (builder) => ({
     // Fetch all puppies
     getAllPuppies: builder.query({
-      query: () => 'puppies',
+      query: () => 'players',
+      providesTags: ['Puppy'], 
+    }),
+
+    // Fetch a specific puppy by ID
+    getPuppy: builder.query({
+      query: (id) => `players/${id}`, 
       providesTags: ['Puppy'], 
     }),
 
     // Add a new puppy
     addPuppy: builder.mutation({
       query: (newPuppy) => ({
-        url: 'puppies',
+        url: 'players',
         method: 'POST',
         body: newPuppy,
       }),
@@ -29,7 +35,7 @@ const api = createApi({
     // Delete a puppy
     deletePuppy: builder.mutation({
       query: (id) => ({
-        url: `puppies/${id}`,
+        url: `players/${id}`,
         method: 'DELETE',
       }),
       invalidatesTags: ['Puppy'], 
@@ -37,10 +43,12 @@ const api = createApi({
   }),
 });
 
+// Export hooks for usage in functional components
 export const {
   useGetAllPuppiesQuery,
   useAddPuppyMutation,
-  useDeletePuppyMutation, 
+  useDeletePuppyMutation,
+  useGetPuppyQuery,
 } = api;
 
 export default api;

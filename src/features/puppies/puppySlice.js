@@ -17,14 +17,14 @@ functions for each endpoint.
 const puppyApi = api.injectEndpoints({
   endpoints: (build) => ({
     getPuppies: build.query({
-      query: () => "/puppies",
+      query: () => "/players",
       providesTags: ["Puppy"],
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error,
     }),
 
     getPuppy: build.query({
-      query: (id) => `/puppies/${id}`,
+      query: (SelectedPuppyId) => `/players/${SelectedPuppyId}`,
       providesTags: ["Puppy"],
       transformResponse: (response) => response.data,
       transformErrorResponse: (error) => error,
@@ -32,7 +32,7 @@ const puppyApi = api.injectEndpoints({
 
     addPuppy: build.mutation({
       query: (newPuppy) => ({
-        url: "/puppies",
+        url: "/players",
         method: "POST",
         body: newPuppy,
       }),
@@ -42,8 +42,8 @@ const puppyApi = api.injectEndpoints({
     }),
 
     deletePuppy: build.mutation({
-      query: (id) => ({
-        url: "puppies",
+      query: (SelectedPuppyId) => ({
+        url: "players",
         method: "DELETE",
       }),
       invalidatesTags: ["Puppy"],

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAddPuppyMutation } from './api';  // Import the mutation hook
+import { useAddPuppyMutation } from "../../api/puppyBowlApi.js";  // Import the mutation hook
 
 /**
  * @component
@@ -8,7 +8,7 @@ import { useAddPuppyMutation } from './api';  // Import the mutation hook
 export default function PuppyForm() {
   const [name, setName] = useState("");
   const [breed, setBreed] = useState("");
-  const [addPuppy, { isLoading, error }] = useAddPuppyMutation(); // Destructure the mutation hook
+  const [addPuppy, { isLoading, isError }] = useAddPuppyMutation(); // Destructure the mutation hook
 
   async function postPuppy(event) {
     event.preventDefault();
@@ -52,7 +52,7 @@ export default function PuppyForm() {
           Add to Roster
         </button>
         {isLoading && <output>Uploading puppy information...</output>}
-        {error && <output>{error.message}</output>}
+        {isError && <output>{error.message}</output>}
       </form>
     </>
   );

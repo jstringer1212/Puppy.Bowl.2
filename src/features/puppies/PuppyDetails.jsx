@@ -1,66 +1,47 @@
 import React from 'react';
-import { useGetPuppyQuery, useDeletePuppyMutation } from './api'; // Import the necessary hooks from the API
+import { useGetPuppyQuery, useDeletePuppyMutation } from "../../api/puppyBowlApi.js"; // Import the necessary hooks from the API
 
-/**
- * @component
- * Shows comprehensive information about the selected puppy, if there is one.
- * Also provides a button for users to remove the selected puppy from the roster.
- */
 export default function PuppyDetails({ selectedPuppyId, setSelectedPuppyId }) {
-  // Grab data from the `getPuppy` query
-  const { data: puppy, error, isLoading } = useGetPuppyQuery(selectedPuppyId, {
-    skip: !selectedPuppyId, // Only run the query if a puppy is selected
+  const { data, error, isLoading } = useGetPuppyQuery(selectedPuppyId, {
+    skip: !selectedPuppyId, // Skip the query if no ID is selected
   });
 
-  // Use the `deletePuppy` mutation
-  const [deletePuppy] = useDeletePuppyMutation();
+  // Access the player data correctly
+  const player = data?.data?.player;
 
-  // Function to remove puppy and reset the selected puppy ID
-  async function removePuppy(id) {
-    try {
-      await deletePuppy(id); // Call the mutation to delete the puppy
-      setSelectedPuppyId(null); // Reset selected puppy after deletion
-    } catch (error) {
-      console.error("Failed to delete puppy:", error);
-    }
+  if (isLoading) {
+    return <p>Loading Puppies. Please wait...</p>;
   }
 
-  // There are 3 possibilities:
-  let $details;
+  if (error) {
+    console.error("Error fetching puppy:", error);
+    return <p>Error Loading Puppy: {error.message}</p>;
+  }
 
-  // 1. A puppy has not yet been selected.
-  if (!selectedPuppyId) {
-    $details = <p>Please select a puppy to see more details.</p>;
-  }
-  // 2. A puppy has been selected, but results have not yet returned from the API.
-  else if (isLoading) {
-    $details = <p>Loading puppy information...</p>;
-  }
-  // 3. Information about the selected puppy has returned from the API.
-  else if (puppy) {
-    $details = (
-      <>
-        <h3>
-          {puppy.name} #{puppy.id}
-        </h3>
-        <p>{puppy.breed}</p>
-        <p>Team {puppy.team?.name ?? "Unassigned"}</p>
-        <button onClick={() => removePuppy(puppy.id)}>Remove from roster</button>
-        <figure>
-          <img src={puppy.imageUrl} alt={puppy.name} />
-        </figure>
-      </>
-    );
-  }
-  // 4. Error handling
-  else if (error) {
-    $details = <p>Error fetching puppy details: {error.message}</p>;
-  }
+  const handleBack = () => {
+    setSelectedPuppyId(null);
+  };
 
   return (
     <aside>
-      <h2>Selected Puppy</h2>
-      {$details}
+      {!selectedPuppyId && <p>No puppy selected.</p>}
+      {player && (
+        <>
+          <h2>Selected Puppy</h2>
+          <button onClick={handleBack}>Back to Roster</button>
+          <h3>
+            Name: {player.name}
+            <br />
+            Puppy ID: {selectedPuppyId}
+          </h3>
+          <p>{player.breed}</p>
+          <p>Team {player.team?.name ?? "Unassigned"}</p>
+          <button onClick={() => removePuppy(player.id)}>Remove from roster</button>
+          <figure>
+            <img src={player.imageUrl} alt={player.name} />
+          </figure>
+        </>
+      )}
     </aside>
   );
 }

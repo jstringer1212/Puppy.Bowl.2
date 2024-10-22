@@ -6,8 +6,8 @@ import store from "./app/store.js";
 import PuppyDetails from "./features/puppies/PuppyDetails";
 import PuppyList from "./features/puppies/PuppyList";
 import PuppyForm from "./features/puppies/PuppyForm";
+import "./index.css";
 
-import "./App.scss";
 
 /**
  * @component

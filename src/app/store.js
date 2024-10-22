@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { api } from "./api"; 
+import api from "../api/puppyBowlApi.js"; 
 
 // Configure the store to use the API slice's auto-generated reducer and middleware
 const store = configureStore({
